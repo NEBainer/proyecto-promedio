@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Promedio de cursada</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Promedio de cursada</h1>
+    <p class="sub">Backend: <code id="api-url"></code> · <span id="estado">verificando…</span></p>
+  </header>
+
+  <!-- Acá aparecen los errores de la API (por ejemplo el 500 del demo) -->
+  <div id="error" class="error" hidden>
+    <strong id="error-titulo"></strong>
+    <span id="error-detalle"></span>
+    <button type="button" id="error-cerrar" aria-label="Cerrar">×</button>
+  </div>
+
+  <main>
+    <section class="tarjeta">
+      <h2>Nueva materia</h2>
+      <form id="form-materia">
+        <input id="nombre" type="text" placeholder="Ej: Programación 4" maxlength="100" required>
+        <button type="submit">Crear</button>
+      </form>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Cargar nota</h2>
+      <form id="form-nota">
+        <select id="materia-select" required></select>
+        <input id="valor" type="number" min="0" max="10" step="0.01" placeholder="0 a 10" required>
+        <button type="submit">Agregar</button>
+      </form>
+    </section>
+
+    <section class="tarjeta">
+      <div class="fila-titulo">
+        <h2>Materias</h2>
+        <button type="button" id="recargar" class="secundario">Recargar</button>
+      </div>
+      <table>
+        <thead><tr><th>Materia</th><th>Promedio</th><th></th></tr></thead>
+        <tbody id="tabla-materias"></tbody>
+      </table>
+      <p id="vacio" class="muted" hidden>Todavía no hay materias.</p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Promedio general</h2>
+      <div class="fila-titulo">
+        <span id="promedio-general" class="numero">—</span>
+        <button type="button" id="ver-general">Calcular</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

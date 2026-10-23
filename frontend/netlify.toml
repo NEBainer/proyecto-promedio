@@ -1,0 +1,5 @@
+# Sitio estático: no hay build, Netlify publica la carpeta tal cual.
+# En Netlify configurar "Base directory" = frontend
+[build]
+  publish = "."
+  command = ""

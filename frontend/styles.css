@@ -1,0 +1,100 @@
+:root {
+  --fondo: #f4f5f7;
+  --tarjeta: #ffffff;
+  --texto: #1f2430;
+  --muted: #6b7280;
+  --borde: #dde1e7;
+  --primario: #2f5bea;
+  --rojo: #c62828;
+  --rojo-fondo: #fdecec;
+  --verde: #1b7f3b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.4;
+}
+
+header, main, .error {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+header { padding-top: 24px; }
+h1 { margin: 0 0 4px; font-size: 1.6rem; }
+h2 { margin: 0 0 12px; font-size: 1.1rem; }
+.sub { margin: 0 0 16px; color: var(--muted); font-size: 0.9rem; }
+.ok { color: var(--verde); font-weight: 600; }
+.mal { color: var(--rojo); font-weight: 600; }
+
+.error {
+  position: sticky;
+  top: 8px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--rojo-fondo);
+  border: 1px solid var(--rojo);
+  color: var(--rojo);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.error span { flex: 1; }
+.error button {
+  background: none;
+  border: none;
+  color: var(--rojo);
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+form { display: flex; gap: 8px; flex-wrap: wrap; }
+input, select {
+  flex: 1 1 160px;
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font: inherit;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primario);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.1); }
+button.secundario { background: #e8ebf0; color: var(--texto); }
+button.chico { padding: 4px 10px; font-size: 0.85rem; }
+
+.fila-titulo { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.fila-titulo h2 { margin: 0; }
+.numero { font-size: 2rem; font-weight: 700; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td { text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--borde); }
+th { color: var(--muted); font-weight: 500; font-size: 0.85rem; }
+td:last-child { text-align: right; }
+.celda-error { color: var(--rojo); font-weight: 600; }
+.muted { color: var(--muted); }
