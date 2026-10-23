@@ -7,9 +7,13 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 # En local, si no existe, usamos un SQLite para poder desarrollar sin Postgres.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./local.db")
 
-# Algunos proveedores entregan "postgres://", pero SQLAlchemy exige "postgresql://".
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+# Supabase/Render pueden entregar "postgres://" o "postgresql://". Desde SQLAlchemy 2.1
+# el driver por defecto de "postgresql://" es psycopg (v3), pero acá instalamos
+# psycopg2, así que lo indicamos explícitamente.
+for prefijo in ("postgres://", "postgresql://"):
+    if DATABASE_URL.startswith(prefijo):
+        DATABASE_URL = "postgresql+psycopg2://" + DATABASE_URL[len(prefijo):]
+        break
 
 # check_same_thread solo aplica a SQLite.
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
