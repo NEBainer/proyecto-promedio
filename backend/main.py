@@ -94,15 +94,19 @@ def promedio_materia(materia_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Materia no encontrada")
 
     notas = [n.valor for n in materia.notas]
-    # BUG A PROPÓSITO (para la demo de Sentry): si la materia no tiene notas,
-    # len(notas) es 0 y esto lanza ZeroDivisionError sin controlar.
+    # Sin notas no hay promedio: devolvemos null en vez de dividir por cero
+    # (antes era el ZeroDivisionError a propósito que mostramos en Sentry).
+    if not notas:
+        return {"promedio": None}
     return {"promedio": sum(notas) / len(notas)}
 
 
 @app.get("/promedio")
 def promedio_general(db: Session = Depends(get_db)):
     notas = [n.valor for n in db.scalars(select(models.Nota)).all()]
-    # Mismo bug a propósito: sin notas cargadas, división por cero.
+    # Mismo caso: sin notas cargadas, null en vez de división por cero.
+    if not notas:
+        return {"promedio": None}
     return {"promedio": sum(notas) / len(notas)}
 
 
