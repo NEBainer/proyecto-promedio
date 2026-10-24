@@ -2,7 +2,8 @@ import os
 from contextlib import asynccontextmanager
 
 import sentry_sdk
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -28,6 +29,22 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Promedio de cursada", lifespan=lifespan)
+
+
+# Los errores no controlados (500) se generan FUERA del CORSMiddleware, así que
+# salían sin cabeceras CORS y el navegador solo veía "Failed to fetch".
+# Este middleware queda por DENTRO de CORS: atrapa la excepción, la manda a
+# Sentry y devuelve un 500 en JSON que el frontend sí puede leer.
+@app.middleware("http")
+async def errores_a_sentry(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as exc:
+        sentry_sdk.capture_exception(exc)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Error interno: {type(exc).__name__}"},
+        )
 
 # Orígenes permitidos, separados por coma. En Render se agrega el dominio de Netlify.
 origins = os.getenv(
