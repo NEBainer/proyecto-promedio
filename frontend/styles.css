@@ -1,13 +1,13 @@
 /* Estética de libreta: hoja cuadriculada, birome azul y corrección en rojo. */
 :root {
   --papel: #fbfcf9;
-  --cuadricula: #dfe8f0;
-  --margen: #e9a3ad;
+  --cuadricula: #eef3f7;
+  --margen: #f3c9cf;
   --tinta: #1f3c9e;       /* birome azul */
   --grafito: #2a2e35;
   --lapiz: #6d7480;
   --correccion: #c4122f;  /* rojo de profe */
-  --mesa: #d9dee4;
+  --mesa: #eceff3;
 }
 
 * { box-sizing: border-box; }
@@ -26,19 +26,20 @@ body {
   position: relative;
   max-width: 760px;
   margin: 0 auto;
-  padding: 40px 40px 32px 72px;
+  padding: 36px 40px 28px 64px;
+  border-radius: 8px;
   background-color: var(--papel);
   background-image:
     linear-gradient(var(--cuadricula) 1px, transparent 1px),
     linear-gradient(90deg, var(--cuadricula) 1px, transparent 1px);
   background-size: 24px 24px;
-  box-shadow: 0 1px 2px rgba(30, 40, 60, .18), 0 12px 32px -16px rgba(30, 40, 60, .35);
+  box-shadow: 0 1px 3px rgba(30, 40, 60, .08);
 }
 .hoja::before {
   content: "";
   position: absolute;
-  top: 0; bottom: 0; left: 48px;
-  border-left: 2px solid var(--margen);
+  top: 0; bottom: 0; left: 40px;
+  border-left: 1px solid var(--margen);
 }
 
 .encabezado {
@@ -50,8 +51,8 @@ body {
 }
 h1 {
   margin: 0;
-  font-size: clamp(1.9rem, 5vw, 2.6rem);
-  font-weight: 800;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--tinta);
@@ -72,15 +73,15 @@ h1 {
   font-size: .9rem;
   font-weight: 500;
   color: var(--lapiz);
-  border-bottom: 2px solid var(--grafito);
+  border-bottom: 1px solid var(--grafito);
 }
-.planilla tbody td { border-bottom: 1px solid #c9d3dd; }
+.planilla tbody td { border-bottom: 1px solid #e1e6ec; }
 .planilla tbody td:first-child { font-weight: 500; }
 .planilla td:last-child, .planilla th:last-child { text-align: right; width: 1%; white-space: nowrap; }
 .planilla .num { text-align: right; width: 7rem; white-space: nowrap; }
 
 .planilla tbody td.num {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--tinta);
 }
@@ -96,8 +97,8 @@ h1 {
 }
 .planilla tfoot th { font-weight: 700; }
 .nota-grande {
-  font-size: 2.4rem;
-  font-weight: 800;
+  font-size: 1.9rem;
+  font-weight: 700;
   line-height: 1;
   color: var(--tinta);
 }
@@ -121,22 +122,21 @@ h1 {
 input, select {
   flex: 1 1 140px;
   min-width: 0;
-  padding: 8px 2px;
-  border: none;
-  border-bottom: 2px solid var(--lapiz);
-  border-radius: 0;
-  background: transparent;
+  padding: 8px 10px;
+  border: 1px solid #cfd6de;
+  border-radius: 6px;
+  background: #fff;
   color: var(--tinta);
   font: 500 1rem "Schibsted Grotesk", system-ui, sans-serif;
 }
 input::placeholder { color: #9aa1ab; }
-input:focus, select:focus { outline: none; border-bottom-color: var(--tinta); }
+input:focus, select:focus { outline: none; border-color: var(--tinta); }
 #valor { flex: 0 1 6.5rem; }
 
 button {
   padding: 9px 16px;
-  border: 2px solid var(--tinta);
-  border-radius: 3px;
+  border: 1px solid var(--tinta);
+  border-radius: 6px;
   background: var(--tinta);
   color: #fff;
   font: 700 .95rem "Schibsted Grotesk", system-ui, sans-serif;
@@ -199,9 +199,9 @@ button.chico:hover { color: var(--correccion); }
 
 @media (max-width: 560px) {
   body { padding: 0; }
-  .hoja { padding: 28px 16px 24px 36px; box-shadow: none; min-height: 100vh; }
-  .hoja::before { left: 22px; }
+  .hoja { padding: 28px 16px 24px 32px; border-radius: 0; box-shadow: none; min-height: 100vh; }
+  .hoja::before { left: 18px; }
   .renglon label { flex-basis: 100%; }
   .planilla .num { width: 5rem; }
-  .nota-grande { font-size: 2rem; }
+  .nota-grande { font-size: 1.7rem; }
 }
