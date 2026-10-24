@@ -4,59 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Promedio de cursada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Promedio de cursada</h1>
-    <p class="sub">Backend: <code id="api-url"></code> · <span id="estado">verificando…</span></p>
-  </header>
+  <div class="hoja">
+    <header class="encabezado">
+      <h1>Promedio de cursada</h1>
+      <button type="button" id="recargar" class="boton-texto">Recargar</button>
+    </header>
 
-  <!-- Acá aparecen los errores de la API (por ejemplo el 500 del demo) -->
-  <div id="error" class="error" hidden>
-    <strong id="error-titulo"></strong>
-    <span id="error-detalle"></span>
-    <button type="button" id="error-cerrar" aria-label="Cerrar">×</button>
-  </div>
+    <!-- Acá aparecen los errores de la API (por ejemplo el 500 del demo) -->
+    <div id="error" class="error" role="alert" hidden>
+      <p><strong id="error-titulo"></strong><span id="error-detalle"></span></p>
+      <button type="button" id="error-cerrar" aria-label="Cerrar aviso">×</button>
+    </div>
 
-  <main>
-    <section class="tarjeta">
-      <h2>Nueva materia</h2>
-      <form id="form-materia">
-        <input id="nombre" type="text" placeholder="Ej: Programación 4" maxlength="100" required>
-        <button type="submit">Crear</button>
+    <table class="planilla">
+      <thead>
+        <tr><th scope="col">Materia</th><th scope="col" class="num">Promedio</th><th scope="col"><span class="oculto">Acciones</span></th></tr>
+      </thead>
+      <tbody id="tabla-materias"></tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">Promedio general</th>
+          <td class="num"><span id="promedio-general" class="nota-grande">—</span></td>
+          <td><button type="button" id="ver-general" class="boton-texto">Calcular</button></td>
+        </tr>
+      </tfoot>
+    </table>
+    <p id="vacio" class="vacio" hidden>La planilla está vacía. Agregá tu primera materia acá abajo.</p>
+
+    <section class="carga" aria-label="Cargar datos">
+      <form id="form-materia" class="renglon">
+        <label for="nombre">Nueva materia</label>
+        <input id="nombre" type="text" placeholder="Programación 4" maxlength="100" required>
+        <button type="submit">Agregar materia</button>
       </form>
-    </section>
 
-    <section class="tarjeta">
-      <h2>Cargar nota</h2>
-      <form id="form-nota">
+      <form id="form-nota" class="renglon">
+        <label for="materia-select">Nueva nota</label>
         <select id="materia-select" required></select>
-        <input id="valor" type="number" min="0" max="10" step="0.01" placeholder="0 a 10" required>
-        <button type="submit">Agregar</button>
+        <input id="valor" type="number" min="0" max="10" step="0.01" placeholder="0 a 10" aria-label="Nota" required>
+        <button type="submit">Cargar nota</button>
       </form>
     </section>
 
-    <section class="tarjeta">
-      <div class="fila-titulo">
-        <h2>Materias</h2>
-        <button type="button" id="recargar" class="secundario">Recargar</button>
-      </div>
-      <table>
-        <thead><tr><th>Materia</th><th>Promedio</th><th></th></tr></thead>
-        <tbody id="tabla-materias"></tbody>
-      </table>
-      <p id="vacio" class="muted" hidden>Todavía no hay materias.</p>
-    </section>
-
-    <section class="tarjeta">
-      <h2>Promedio general</h2>
-      <div class="fila-titulo">
-        <span id="promedio-general" class="numero">—</span>
-        <button type="button" id="ver-general">Calcular</button>
-      </div>
-    </section>
-  </main>
+    <footer class="pie">
+      <span id="estado">Conectando…</span> con <code id="api-url"></code>
+    </footer>
+  </div>
 
   <script src="config.js"></script>
   <script src="app.js"></script>

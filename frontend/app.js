@@ -49,7 +49,14 @@ function mostrarError(err, contexto) {
 }
 $("error-cerrar").addEventListener("click", () => ($("error").hidden = true));
 
-const formatear = (n) => (n === null || n === undefined ? "Sin notas" : n.toFixed(2));
+// Formato argentino: coma decimal (7,50).
+const formatear = (n) =>
+  n === null || n === undefined
+    ? "Sin notas"
+    : n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// Clase según la nota: menos de 6 va en rojo, como corrección de profe.
+const claseNota = (n) => (n === null || n === undefined ? "sin-notas" : n < 6 ? "baja" : "");
 
 // --- Lista de materias con su promedio --------------------------------
 async function cargarMaterias() {
@@ -74,6 +81,7 @@ async function cargarMaterias() {
     tdNombre.textContent = m.nombre; // textContent: evita inyectar HTML
     const tdPromedio = document.createElement("td");
     tdPromedio.textContent = "…";
+    tdPromedio.className = "num";
     const tdAcciones = document.createElement("td");
     const borrar = document.createElement("button");
     borrar.textContent = "Borrar";
@@ -92,10 +100,13 @@ async function cargarMaterias() {
     // Cada materia pide su promedio por separado: si una falla (bug de
     // la materia sin notas), las demás se siguen viendo bien.
     api(`/materias/${m.id}/promedio`)
-      .then((r) => (tdPromedio.textContent = formatear(r.promedio)))
+      .then((r) => {
+        tdPromedio.textContent = formatear(r.promedio);
+        tdPromedio.className = `num ${claseNota(r.promedio)}`.trim();
+      })
       .catch((err) => {
         tdPromedio.textContent = `⚠ Error ${err.status || ""}`.trim();
-        tdPromedio.className = "celda-error";
+        tdPromedio.className = "num celda-error";
         mostrarError(err, `promedio de "${m.nombre}"`);
       });
   }
@@ -148,8 +159,10 @@ $("ver-general").addEventListener("click", async () => {
   try {
     const r = await api("/promedio");
     $("promedio-general").textContent = formatear(r.promedio);
+    $("promedio-general").className = `nota-grande ${claseNota(r.promedio)}`.trim();
   } catch (err) {
     $("promedio-general").textContent = "⚠";
+    $("promedio-general").className = "nota-grande baja";
     mostrarError(err, "promedio general");
   }
 });
@@ -162,14 +175,14 @@ $("recargar").addEventListener("click", cargarMaterias);
 async function iniciar() {
   $("api-url").textContent = API_URL;
   const aviso = setTimeout(() => {
-    $("estado").textContent = "despertando el servidor (puede tardar ~1 min)…";
+    $("estado").textContent = "Despertando el servidor (puede tardar un minuto)";
   }, 3000);
   try {
     await api("/health");
-    $("estado").textContent = "conectado ✓";
+    $("estado").textContent = "Conectado";
     $("estado").className = "ok";
   } catch (err) {
-    $("estado").textContent = "sin conexión";
+    $("estado").textContent = "Sin conexión";
     $("estado").className = "mal";
     mostrarError(err, "health check");
   } finally {
